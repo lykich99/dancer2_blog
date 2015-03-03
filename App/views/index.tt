@@ -1,0 +1,339 @@
+
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+        
+
+    <header class="navbar navbar-inverse navbar-fixed-top" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/"><img src="/img/logo.png" alt="Basica"></a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                
+                    <li <% IF css_active == 'about' %> class="active" <% END %> > <a href="/"> About Me </a></li>
+                    <li <% IF css_active == 'blog' %> class="active" <% END %> > <a href="/blog"> Blog </a></li> 
+                    <li <% IF css_active == 'contact' %> class="active" <% END %> > <a href="/contact">Contact </a> </li>
+                
+                </ul>
+            </div>
+        </div>
+    </header><!--/header-->
+
+        <!-- Page Title -->
+		<div class="section section-breadcrumbs">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">	
+						<h1> <% breadcrumb %> </h1>
+					</div>
+				</div>
+			</div>
+		</div>
+     
+<% IF css_active == 'about' %>
+   
+        <div class="section">
+	    	<div class="container">
+				<div class="row">
+				<div class="col-sm-4">
+				<img class="img-responsive" src="img/snow_drag.jpg" alt="Dragobrat">
+				</div>
+				<div class="col-sm-8">
+						<h2>He.</h2>
+						<h3>Few words...</h3>
+						<p>
+						    I Lykashov Yuriy.<br>
+							One day I read article <a href="http://perlmaven.com/improve-your-communication-skills"> Improve your language and communication skills! </a>  and I have begun to do.
+						</p>
+						<p>
+						   I took for the basic <a href="http://perldancer.org">Dancer2</a> and started develop. I program and learning english :)<br>
+						   Code this the site you can get <a>github</a>.<br>
+						   My interest programmin, snowbording, motorbike and bee.
+						</p>
+
+
+						
+						
+					
+					</div>
+				</div>
+			</div>
+		</div>
+
+<hr>		
+
+
+
+        <div class="section">
+	        <div class="container">
+	        	<div class="row">
+	        		<!-- Featured News -->
+	        		<div class="col-sm-6 featured-news">
+	        			<h2>Latest Blog Posts</h2>
+	        		    <% FOREACH v IN rows.values %>
+	        			<div class="row">
+	        			
+	        				<div class="col-xs-4"><a href="blog/<% v.date %>"><img src="<% v.img_link %>" alt="Post Title"></a></div>
+	        			
+	        				<div class="col-xs-8">
+	        					<div class="caption"><a href="blog/<% v.date %> "><%  v.h1 %></a></div>
+	        					<div class="date"> <% v.date %> </div>
+	        					<div class="intro">  <% v.small_post %> <a href="blog/<% v.date %>">Read more...</a></div>
+	        				</div>
+	        			</div>
+                        <% END %>
+
+	        	 </div>
+	        		<!-- End Featured News -->
+	        		
+	        		<!-- Latest News -->
+	        		<div class="col-sm-6 latest-news">
+	        			
+	        			<h2>Latest News</h2>
+	        			
+		
+	        		</div>
+	        		<!-- End Featured News -->
+	        	</div>
+	        </div>
+	    </div>
+
+<% END %>		
+
+
+<% IF breadcrumb == 'Blog' %>
+
+       <div class="section">
+	    	<div class="container">
+				<div class="row">
+					<!-- Blog Post Excerpt -->
+					
+					<% FOREACH v IN rows.values %>
+					
+						<div class="col-sm-6">
+							<div class="blog-post blog-single-post">
+								<div class="single-post-title">
+									<h2><%  v.h1 %></h2>
+								</div>
+
+								<div class="single-post-image">
+									<img src="<% v.img_link %>" alt="Post Title">
+								</div>
+								
+								<div class="single-post-info">
+									<i class="glyphicon glyphicon-time"></i> <% v.date %> 
+								</div>
+								
+								<div class="single-post-content">
+								   <p>
+                                      <% v.small_post %>
+								   </p>
+								<a href="blog/<% v.date %>" class="btn">Read more</a>
+								</div>
+							</div>
+						</div>
+					
+				    <% END %>	
+					
+					<!-- End Blog Post Excerpt -->
+					
+								<!-- Pagination -->
+								<div class="pagination-wrapper ">
+									<ul class="pagination pagination-sm">
+										<li class="disabled"><a href="#">Previous</a></li>
+										<li class="active"><a href="/blog">1</a></li>
+										<li class="disabled" ><a href="#">Next</a></li>
+									</ul>
+								</div>				
+
+				</div>
+			</div>
+	    </div>
+
+
+
+
+<% END %>
+
+<% IF breadcrumb == 'Categories'%>
+
+           <div class="section">
+	    	<div class="container">
+				<div class="row">
+					<!-- Blog Post Excerpt -->
+					
+					<% FOREACH v IN rows_cat.values %>
+					
+						<div class="col-sm-6">
+							<div class="blog-post blog-single-post">
+								<div class="single-post-title">
+									<h2><%  v.h1 %></h2>
+								</div>
+
+								<div class="single-post-image">
+									<img src="<% v.img_link %>" alt="Post Title">
+								</div>
+								
+								<div class="single-post-info">
+									<i class="glyphicon glyphicon-time"></i> <% v.date %> 
+								</div>
+								
+								<div class="single-post-content">
+								   <p>
+                                      <% v.small_post %>
+								   </p>
+								<a href="/blog/<% v.date %>" class="btn">Read more</a>
+								</div>
+							</div>
+						</div>
+					
+				    <% END %>	
+					
+					<!-- End Blog Post Excerpt -->
+					
+								<!-- Pagination -->
+								<div class="pagination-wrapper ">
+									<ul class="pagination pagination-sm">
+										<li class="disabled"><a href="#">Previous</a></li>
+										<li class="active"><a href="/blog">1</a></li>
+										<li class="disabled" ><a href="#">Next</a></li>
+									</ul>
+								</div>				
+
+				</div>
+			</div>
+	    </div>
+
+
+
+<% END %>
+
+<% IF breadcrumb == 'Blog post' %>
+
+     <div class="section">
+	     <div class="container">
+			  <div class="row">
+				  <!-- Blog Post -->
+					<div class="col-sm-8">
+						<div class="blog-post blog-single-post">
+							<div class="single-post-title">
+								<h2> <% rows.h1 %></h2>
+							</div>
+
+							<div class="single-post-image">
+								<img src="<% rows.img_link %>" alt="Post Title">
+							</div>
+							<div class="single-post-info">
+								<i class="glyphicon glyphicon-time"></i> <% rows.date %> </a>
+							</div>							
+							<div class="single-post-content">
+								<h3> <% rows.h1 %> </h3>
+								<p>
+								  <% rows.big_post %>	
+								</p>
+					
+					   </div>
+			 </div>
+		</div>
+		 <!-- End Blog Post -->
+		 <!-- Sidebar -->
+		<div class="col-sm-4 blog-sidebar">
+			<h4>Search our Blog</h4>
+				<form>
+					<div class="input-group">
+						<input class="form-control input-md" id="appendedInputButtons" type="text" disabled>
+						 <span class="input-group-btn">
+							<button class="btn btn-md" type="button" disabled>Search</button>
+						 </span>
+					</div>
+					</form>
+						<h4>Recent Posts</h4>
+						<ul class="recent-posts">
+						  <% FOREACH v IN rows_post4.values %>
+							 <li><a href="/blog/<% v.date %>"> <% v.h1 %> </a></li>
+						   <% END %>
+						</ul>
+						
+						
+						<h4>Categories</h4>
+						<ul class="blog-categories">
+							<% FOREACH v IN rows_c.values %>
+							  <li><a href="/blog/categories/<% v.categories_name %>"><% v.categories_name %></a></li>
+						    <% END %>
+						</ul>
+						<h4>Archive</h4>
+						<ul>
+							<li><a href="#">January 2013</a></li>
+							<li><a href="#">February 2013</a></li>
+							<li><a href="#">March 2013</a></li>
+							<li><a href="#">April 2013</a></li>
+							<li><a href="#">May 2013</a></li>
+						</ul>
+					</div>
+					<!-- End Sidebar -->
+				</div>
+			</div>
+	    </div>
+
+
+<% END %>
+
+
+<% IF css_active == 'contact' %>
+
+          <div class="section section-map">
+
+
+	        		<div class="col-sm-12" style="padding:0;">
+	        			<!-- Map -->
+	        			<div id="contact-us-map">
+							<iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2587.4192878722065!2d34.49797220000001!3d49.57097940000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d82f2d30aeded5%3A0x6039b0200e37afc8!2z0LLRg9C7LiDQk9C10YDQvtGX0LIg0KHRgtCw0LvRltC90LPRgNCw0LTRgywgMjQsINCf0L7Qu9GC0LDQstCwLCDQn9C-0LvRgtCw0LLRgdGM0LrQsCDQvtCx0LvQsNGB0YLRjA!5e0!3m2!1sru!2sua!4v1424189710687" width="600" height="450" frameborder="0" style="border:0"></iframe>
+							<br />
+							<small>
+								<a src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2587.4192878722065!2d34.49797220000001!3d49.57097940000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d82f2d30aeded5%3A0x6039b0200e37afc8!2z0LLRg9C7LiDQk9C10YDQvtGX0LIg0KHRgtCw0LvRltC90LPRgNCw0LTRgywgMjQsINCf0L7Qu9GC0LDQstCwLCDQn9C-0LvRgtCw0LLRgdGM0LrQsCDQvtCx0LvQsNGB0YLRjA!5e0!3m2!1sru!2sua!4v1424189710687" width="600" height="450" frameborder="0" style="border:0" ></a>
+							</small>
+							</iframe>
+	        			</div>
+	        			<!-- End Map -->
+					</div>
+
+
+	    </div>
+
+        <div class="section">
+	    	<div class="container">
+	        	<div class="row">
+					<h3>Get in Touch with Me</h3>
+					</hr>
+	        		<div class="col-sm-6">
+	        			<!-- Contact Info -->
+	        			<p class="contact-us-details">
+                                                <b>Address:</b> str H.Stalingrada 24/2 108, Poltava, Ukraine<br/>
+	        				<b>Phone:</b> +3 80 958135799<br/>
+	        				<b>Phone:</b> +3 80 972720786<br/>
+	        				<b>Email:</b> <a href="mailto:lykich2004@mail.ru">lykich2004@mail.ru</a>
+	        			</p>
+	        			<!-- End Contact Info -->
+	        		</div>
+	        		<div class="col-sm-6">
+
+	        		</div>
+	        	</div>
+	    	</div>
+	    </div>
+
+
+
+
+<% END %>
+
+
+

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<html lang="en">	
+	
+<head>
+	
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Yuriy Lukashov - blog engine">
+    <meta name="author" content="Yuriy Lukashov">
+
+    <title>Yuriy Lukashov - blog engine</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="<% request.uri_base %>/css/bootstrap.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="<% request.uri_base %>/css/main.css" />
+    <link rel="stylesheet" href="<% request.uri_base %>/css/custom.css" />
+    
+	
+	<script src="//use.edgefonts.net/bebas-neue.js"></script>
+
+    <!-- Custom Fonts & Icons -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,800' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="<% request.uri_base %>/css/icomoon-social.css" />
+	<link rel="stylesheet" href="<% request.uri_base %>/css/font-awesome.min.css" />
+	
+	<script type="text/javascript" src="<% request.uri_base %>/javascripts/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+	
+	<!-- Javascripts -->       
+    <script type="text/javascript" src="<% request.uri_base %>/javascripts/jquery.js"></script>
+    <script type="text/javascript" src="<% request.uri_base %>/javascripts/bootstrap.min.js"></script>
+	<!-- Scrolling Nav JavaScript -->
+    <script type="text/javascript" src="<% request.uri_base %>/javascripts/jquery.easing.min.js"></script>
+    <script type="text/javascript" src="<% request.uri_base %>/javascripts/scrolling-nav.js"></script>
+	
+</head>
+
+
+<body>
+   
+    <% content %>
+   
+	<!-- Footer -->
+	<div class="footer">
+	    <div class="container">	
+		    <div class="row">
+		    	<div class="col-footer col-md-4 col-xs-6">
+		    			<h3>Contact Me</h3>
+		    			<p class="contact-us-details">
+	        				<b>Address:</b> str G.Stalingrada 24/2 108, Poltava, Ukraine<br/>
+	        				<b>Phone:</b> +3 80 958135799<br/>
+	        				<b>Phone:</b> +3 80 972720786<br/>
+	        				<b>Email:</b> <a href="mailto:lykich2004@mail.ru">lykich2004@mail.ru</a>
+	        			</p>
+		    		</div>				
+		    		<div class="col-footer col-md-4 col-xs-6">
+		    			<h3>Social Networks</h3>
+						
+		    			<div>
+		    				<img src="img/icons/facebook.png" width="32" alt="Facebook">
+		    				<img src="img/icons/twitter.png" width="32" alt="Twitter">
+		    				<img src="img/icons/linkedin.png" width="32" alt="LinkedIn">
+						</div>
+		    		</div>
+		    		<div class="col-footer col-md-4 col-xs-6">
+		    			<h3>About </h3>
+		    				
+		    		</div>
+
+		    	</div>
+		    	<div class="row">
+		    		<div class="col-md-12">
+		    			<div class="footer-copyright">&copy; 2014 <a href="http://www.ylukashov.tk/">Yuriy Lukashov</a></div>
+		    		</div>
+		    	</div>
+		    </div>
+    </div>
+	    
+	    
+</body>
+</html>
