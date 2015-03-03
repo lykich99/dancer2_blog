@@ -35,6 +35,15 @@ This is not finished relise. Every day more code. <a href="ylukashov.tk"> This e
 		  KEY `categories_id` (`categories_id`)<br>
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Content for blog';<br>
         <br>
+        
+        CREATE TABLE `categories` (
+		  `id` int(10) NOT NULL AUTO_INCREMENT,
+	           `categories_name` char(20) NOT NULL,
+  		   PRIMARY KEY (`id`),
+  		   UNIQUE KEY `categories_name` (`categories_name`)
+            ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
+        
+        
       For test you can use the data dump blog.sql<br>
        mysql -u user -p blog < blog.sql<br>
       <br>
