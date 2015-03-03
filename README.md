@@ -14,9 +14,9 @@ This is not finished relise. Every day more code. <a href="ylukashov.tk"> This e
      In the production I use fcgi. Below my http.conf<br>
       <br>
      \<VirtualHost *:80\><br>
-		  ServerName ylukashov.my<br>
+		  ServerName ylukashov.tk<br>
 		  UseCanonicalName on<br>
-		  ServerAlias www.ylukashov.my<br>
+		  ServerAlias www.ylukashov.tk<br>
 		  DocumentRoot /home/www/ylukashov/ylukashov.tk/www/App  <br>
           ScriptAlias / /home/www/ylukashov/ylukashov.tk/www/App/public/dispatch.fcgi/<br>
      \</VirtualHost\><br>
