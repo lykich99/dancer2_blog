@@ -55,7 +55,7 @@
 						</p>
 						<p>
 						   I took for the basic <a href="http://perldancer.org">Dancer2</a> and started develop. I program and learning english :)<br>
-						   Code this the site you can get <a>github</a>.<br>
+						   Code this the site you can get <a href="https://github.com/lykich99/dancer2_blog">github</a>.<br>
 						   My interest programmin, snowbording, motorbike and bee.
 						</p>
 
@@ -78,7 +78,7 @@
 	        		<!-- Featured News -->
 	        		<div class="col-sm-6 featured-news">
 	        			<h2>Latest Blog Posts</h2>
-	        		    <% FOREACH v IN rows.values %>
+	        		    <% FOREACH v IN rows.values.reverse %>
 	        			<div class="row">
 	        			
 	        				<div class="col-xs-4"><a href="blog/<% v.date %>"><img src="<% v.img_link %>" alt="Post Title"></a></div>
@@ -146,6 +146,7 @@
 					<!-- End Blog Post Excerpt -->
 					
 								<!-- Pagination -->
+								<% IF pg_count > 4 %>
 								<div class="pagination-wrapper ">
 									<ul class="pagination pagination-sm">
 										<li class="disabled"><a href="#">Previous</a></li>
@@ -153,7 +154,7 @@
 										<li class="disabled" ><a href="#">Next</a></li>
 									</ul>
 								</div>				
-
+                               <% END %>
 				</div>
 			</div>
 	    </div>
@@ -199,7 +200,8 @@
 					
 					<!-- End Blog Post Excerpt -->
 					
-								<!-- Pagination -->
+							<!-- Pagination -->
+							 <% IF pg_count > 4 %>
 								<div class="pagination-wrapper ">
 									<ul class="pagination pagination-sm">
 										<li class="disabled"><a href="#">Previous</a></li>
@@ -207,7 +209,7 @@
 										<li class="disabled" ><a href="#">Next</a></li>
 									</ul>
 								</div>				
-
+                             <% END %>
 				</div>
 			</div>
 	    </div>
@@ -271,11 +273,11 @@
 						</ul>
 						<h4>Archive</h4>
 						<ul>
-							<li><a href="#">January 2013</a></li>
-							<li><a href="#">February 2013</a></li>
-							<li><a href="#">March 2013</a></li>
-							<li><a href="#">April 2013</a></li>
-							<li><a href="#">May 2013</a></li>
+                           <% FOREACH va IN rows_ar.values %> 
+							<li><a href="/blog/archive/<% va.ym %>"> <% va.ym %> </a></li>
+                           <% END %>
+							
+
 						</ul>
 					</div>
 					<!-- End Sidebar -->
@@ -286,6 +288,60 @@
 
 <% END %>
 
+<!--------------------------------------- Start Archive -------------------------------------!>
+
+<% IF breadcrumb == 'Archive' %>
+              <div class="section">
+	    	<div class="container">
+				<div class="row">
+					<!-- Blog Post Excerpt -->
+					
+					<% FOREACH v_ar IN rows_arch.values %>
+					
+						<div class="col-sm-6">
+							<div class="blog-post blog-single-post">
+								<div class="single-post-title">
+									<h2><% v_ar.h1 %></h2>
+								</div>
+
+								<div class="single-post-image">
+									<img src="<% v_ar.img_link %>" alt="Post Title">
+								</div>
+								
+								<div class="single-post-info">
+									<i class="glyphicon glyphicon-time"></i> <% v_ar.date %> 
+								</div>
+								
+								<div class="single-post-content">
+								   <p>
+                                      <% v_ar.small_post %>
+								   </p>
+								<a href="/blog/<% v_ar.date %>" class="btn">Read more</a>
+								</div>
+							</div>
+						</div>
+					
+				    <% END %>	
+					
+					<!-- End Blog Post Excerpt -->
+					
+							<!-- Pagination -->
+							 <% IF pg_count > 4 %>
+								<div class="pagination-wrapper ">
+									<ul class="pagination pagination-sm">
+										<li class="disabled"><a href="#">Previous</a></li>
+										<li class="active"><a href="/blog">1</a></li>
+										<li class="disabled" ><a href="#">Next</a></li>
+									</ul>
+								</div>				
+                             <% END %>
+				</div>
+			</div>
+	    </div>
+
+<% END %>
+
+<!---------------------------------- End Archive ------------------------------------------->
 
 <% IF css_active == 'contact' %>
 
