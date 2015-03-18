@@ -78,18 +78,19 @@
 	        		<!-- Featured News -->
 	        		<div class="col-sm-6 featured-news">
 	        			<h2>Latest Blog Posts</h2>
-	        		    <% FOREACH v IN rows.values.reverse %>
-	        			<div class="row">
+	        		    
+	        		    <% FOREACH r = rows.keys.sort.reverse %>
+	        			 <div class="row">
 	        			
-	        				<div class="col-xs-4"><a href="blog/<% v.date %>"><img src="<% v.img_link %>" alt="Post Title"></a></div>
+	        			 <div class="col-xs-4"><a href="blog/<% rows.$r.date %>"><img src="<% rows.$r.img_link %>" alt="Post Title"></a></div>
 	        			
 	        				<div class="col-xs-8">
-	        					<div class="caption"><a href="blog/<% v.date %> "><%  v.h1 %></a></div>
-	        					<div class="date"> <% v.date %> </div>
-	        					<div class="intro">  <% v.small_post %> <a href="blog/<% v.date %>">Read more...</a></div>
+	        					<div class="caption"><a href="blog/<% rows.$r.date %> "><%  rows.$r.h1 %></a></div>
+	        					<div class="date"> <% rows.$r.date %> </div>
+	        					<div class="intro">  <% rows.$r.small_post %> <a href="blog/<% rows.$r.date %>">Read more...</a></div>
 	        				</div>
-	        			</div>
-                        <% END %>
+	        			  </div>
+                         <% END %>
 
 	        	 </div>
 	        		<!-- End Featured News -->
@@ -116,45 +117,53 @@
 				<div class="row">
 					<!-- Blog Post Excerpt -->
 					
-					<% FOREACH v IN rows.values %>
+					<% FOREACH r = rows.keys.sort.reverse %>
 					
 						<div class="col-sm-6">
 							<div class="blog-post blog-single-post">
 								<div class="single-post-title">
-									<h2><%  v.h1 %></h2>
+									<h2><% rows.$r.h1 %></h2>
 								</div>
 
 								<div class="single-post-image">
-									<img src="<% v.img_link %>" alt="Post Title">
+									<img src="<% rows.$r.img_link %>" alt="Post Title">
 								</div>
 								
 								<div class="single-post-info">
-									<i class="glyphicon glyphicon-time"></i> <% v.date %> 
+									<i class="glyphicon glyphicon-time"></i> <% rows.$r.date %> 
 								</div>
 								
 								<div class="single-post-content">
 								   <p>
-                                      <% v.small_post %>
+                                       <% rows.$r.small_post %>
 								   </p>
-								<a href="blog/<% v.date %>" class="btn">Read more</a>
+								<a href="/blog/<% rows.$r.date %>" class="btn">Read more</a>
 								</div>
 							</div>
 						</div>
 					
-				    <% END %>	
+				    <% END %>
 					
-					<!-- End Blog Post Excerpt -->
-					
-								<!-- Pagination -->
-								<% IF pg_count > 4 %>
-								<div class="pagination-wrapper ">
-									<ul class="pagination pagination-sm">
-										<li class="disabled"><a href="#">Previous</a></li>
-										<li class="active"><a href="/blog">1</a></li>
-										<li class="disabled" ><a href="#">Next</a></li>
-									</ul>
-								</div>				
-                               <% END %>
+		 <!-- End Blog Post Excerpt -->					
+			<!-- Pagination -->
+					 <div class="pagination-wrapper ">                          
+						 <% IF pager.current_page > 1 %>
+							<a href="<%href_p%><% pager.current_page - 1 %>">&lt;&lt;</a>
+						<% END %>
+						<% FOREACH num = [pager.first_page .. pager.last_page] %>
+						
+						<% IF num == pager.current_page %> [ <% num %> ] 
+						   <% ELSE %><a href="<%href_p%><% num %>">  <% num %>  </a><% END %>
+						<% END %>
+						
+						<% IF pager.current_page < pager.last_page %>
+							<a href="<%href_p%><% pager.last_page %>">&gt;&gt;</a>
+						<% END %>
+						
+					 </div>
+       
+                 <!--------- End Paginator ---------->          
+                                                    
 				</div>
 			</div>
 	    </div>
@@ -171,27 +180,27 @@
 				<div class="row">
 					<!-- Blog Post Excerpt -->
 					
-					<% FOREACH v IN rows_cat.values %>
+					<% FOREACH r = rows_cat.keys.nsort.reverse %>
 					
 						<div class="col-sm-6">
 							<div class="blog-post blog-single-post">
 								<div class="single-post-title">
-									<h2><%  v.h1 %></h2>
+									<h2><% rows_cat.$r.h1 %></h2>
 								</div>
 
 								<div class="single-post-image">
-									<img src="<% v.img_link %>" alt="Post Title">
+									<img src="<% rows_cat.$r.img_link %>" alt="Post Title">
 								</div>
 								
 								<div class="single-post-info">
-									<i class="glyphicon glyphicon-time"></i> <% v.date %> 
+									<i class="glyphicon glyphicon-time"></i> <% rows_cat.$r.date %> 
 								</div>
 								
 								<div class="single-post-content">
 								   <p>
-                                      <% v.small_post %>
+                                      <% rows_cat.$r.small_post %>
 								   </p>
-								<a href="/blog/<% v.date %>" class="btn">Read more</a>
+								<a href="/blog/<% rows_cat.$r.date %>" class="btn">Read more</a>
 								</div>
 							</div>
 						</div>
@@ -259,11 +268,10 @@
 					</form>
 						<h4>Recent Posts</h4>
 						<ul class="recent-posts">
-						  <% FOREACH v IN rows_post4.values %>
-							 <li><a href="/blog/<% v.date %>"> <% v.h1 %> </a></li>
+                           <% FOREACH r = rows_post4.keys.sort.reverse %>
+							  <li><a href="/blog/<% rows_post4.$r.date %>"> <% rows_post4.$r.h1 %> </a></li>
 						   <% END %>
 						</ul>
-						
 						
 						<h4>Categories</h4>
 						<ul class="blog-categories">
@@ -296,27 +304,27 @@
 				<div class="row">
 					<!-- Blog Post Excerpt -->
 					
-					<% FOREACH v_ar IN rows_arch.values %>
+					<% FOREACH r = rows_arch.keys.sort.reverse %>
 					
 						<div class="col-sm-6">
 							<div class="blog-post blog-single-post">
 								<div class="single-post-title">
-									<h2><% v_ar.h1 %></h2>
+									<h2><% rows_arch.$r.h1 %></h2>
 								</div>
 
 								<div class="single-post-image">
-									<img src="<% v_ar.img_link %>" alt="Post Title">
+									<img src="<% rows_arch.$r.img_link %>" alt="Post Title">
 								</div>
 								
 								<div class="single-post-info">
-									<i class="glyphicon glyphicon-time"></i> <% v_ar.date %> 
+									<i class="glyphicon glyphicon-time"></i> <% rows_arch.$r.date %> 
 								</div>
 								
 								<div class="single-post-content">
 								   <p>
-                                      <% v_ar.small_post %>
+                                      <% rows_arch.$r.small_post %>
 								   </p>
-								<a href="/blog/<% v_ar.date %>" class="btn">Read more</a>
+								<a href="/blog/<% rows_arch.$r.date %>" class="btn">Read more</a>
 								</div>
 							</div>
 						</div>

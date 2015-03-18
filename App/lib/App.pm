@@ -3,6 +3,7 @@ use Dancer2;
 use Dancer2::Plugin::Database;
 use Data::Page;
 use Dancer2::Logger::Console;
+use Data::Pageset::Render;
 use Data::Dumper;
 
 our $VERSION = '0.1';
@@ -22,27 +23,49 @@ get '/' => sub {
 };
 
 get '/blog' => sub {
-	
-    my $sth = database->prepare( 'SELECT * FROM blog limit 4' );
+    my $sth = database->prepare( 'SELECT * FROM blog order by date DESC limit 4' );
 	   $sth->execute() or die $DBI::errstr;
     my $pg = database->prepare( 'select count(*) from blog' );
        $pg->execute() or die $DBI::errstr;
     my ($pg_count) = $pg->fetchrow_array;
-    my $carent_page = '1';
-    my $page = Data::Page->new( $pg_count, 4, $carent_page );
-    	
-    #print "MAPPING:" . Dumper($page);	
-    #print "Entries:", $page->total_entries, "\n";
-    #print "Pages range to: ", $page->last_page, "\n";
-    #print "Pages range to: ", $page->last_page, "\n";
-    	
+    my $carent_page = '1';    
+    my $pager = get_paginator( $pg_count,4,1);
+    my $href_p = "./blog/page/";	
     template 'index', {
 	  'css_active' => 'blog',
 	  'breadcrumb' => 'Blog',	
 	  'rows'       => $sth->fetchall_hashref('id'),
-	  'c_page'     => $page->current_page,
-	  'pg_count'   => $pg_count
+	  'pager'      => $pager,
+	  'href_p'     => $href_p
     }
+};
+
+get '/blog/page/:name' => sub {
+    my $param_page = params->{name};   
+    my $step_p;
+    if( $param_page != 1 ) {
+        $step_p = ( $param_page - 1 )*4;
+     } else {
+		$step_p = 1;
+	 }	 
+    my $sth = database->prepare( "SELECT * FROM blog WHERE id >= '$step_p' ORDER BY date limit 4" );
+       $sth->execute() or die $DBI::errstr;
+    my $pg = database->prepare( 'select count(*) from blog' );
+       $pg->execute() or die $DBI::errstr;
+    my ($pg_count) = $pg->fetchrow_array;
+    my $carent_page = '1';    
+    my $pager = get_paginator( $pg_count,4,$param_page);
+    my $href_p = "";
+    my $h_b = "blog/";
+    template 'index', {
+	  'css_active' => 'blog',
+	  'breadcrumb' => 'Blog',	
+	  'rows'       => $sth->fetchall_hashref('id'),
+	  'pager'      => $pager,
+	  'hb'         => $h_b,
+	  'href_p'     => $href_p
+
+    }   
 };
 
 get '/blog/:name' => sub {
@@ -51,11 +74,11 @@ get '/blog/:name' => sub {
 	    $post->execute() or die $DBI::errstr;
      my $cat = database->prepare( "SELECT * FROM categories" );
         $cat->execute() or die $DBI::errstr;
-     my $post4 = database->prepare( "SELECT h1,date FROM blog ORDER by date limit 4" );  
+     my $post4 = database->prepare( "SELECT h1,date FROM blog ORDER by date DESC limit 4" );  
         $post4->execute() or die $DBI::errstr;
      my $p_ar = database->prepare( "SELECT DISTINCT DATE_FORMAT(date,'%M %Y') as ym FROM blog order by date limit 12" );
         $p_ar->execute() or die $DBI::errstr;
-        
+     my $href_b = "blog/";   
 	 template 'index', {
 	  'css_active' => 'blog',
 	  'breadcrumb' => 'Blog post',
@@ -63,6 +86,7 @@ get '/blog/:name' => sub {
 	  'rows_c'     => $cat->fetchall_hashref('id'), 
 	  'rows_post4' => $post4->fetchall_hashref('h1'),
 	  'rows_ar'    => $p_ar->fetchall_hashref('ym'),
+	  'href_b'     => $href_b
      }		    
 	    
 };
@@ -70,7 +94,7 @@ get '/blog/:name' => sub {
 
 get '/blog/categories/:name' => sub {
     my $post_cat = params->{name};
-    my $p_cat = database->prepare( "SELECT h1,img_link,date,small_post,big_post FROM blog as b,categories as c WHERE b.categories_id=c.id AND c.categories_name='$post_cat' ORDER by date limit 4" );
+    my $p_cat = database->prepare( "SELECT h1,img_link,date,small_post,big_post FROM blog as b,categories as c WHERE b.categories_id=c.id AND c.categories_name='$post_cat' ORDER by date DESC limit 4" );
        $p_cat->execute() or die $DBI::errstr;
     template 'index', {
 	  'css_active' => 'blog',
@@ -82,7 +106,7 @@ get '/blog/categories/:name' => sub {
 
 get '/blog/archive/:name' => sub {
     my $post_arch = params->{name};    
-    my $s_arch = database->prepare( "SELECT * FROM blog WHERE date BETWEEN DATE_FORMAT((STR_TO_DATE('$post_arch','%M %Y')),'%Y-%m-01 00:00:00') AND DATE_FORMAT(LAST_DAY(DATE_FORMAT((STR_TO_DATE('$post_arch','%M %Y')),'%Y-%m-01 00:00:00')),'%Y-%m-%d 23:59:59') order by date limit 4" );
+    my $s_arch = database->prepare( "SELECT * FROM blog WHERE date BETWEEN DATE_FORMAT((STR_TO_DATE('$post_arch','%M %Y')),'%Y-%m-01 00:00:00') AND DATE_FORMAT(LAST_DAY(DATE_FORMAT((STR_TO_DATE('$post_arch','%M %Y')),'%Y-%m-01 00:00:00')),'%Y-%m-%d 23:59:59') ORDER by date DESC limit 4" );
        $s_arch->execute() or die $DBI::errstr;
        
     template 'index', {
@@ -102,6 +126,22 @@ get '/contact' => sub {
 		
    }
 };
+
+sub get_paginator {
+
+    my ( $pg_count,$ent_p,$curr_p ) = @_; 
+    my $pager = Data::Pageset::Render->new( {
+       total_entries    => $pg_count,
+       entries_per_page => $ent_p,
+       current_page     => $curr_p,
+       pages_per_set    => 5,
+       mode             => 'slider'
+       });
+
+    return $pager;
+
+}
+
 
 
 true;
