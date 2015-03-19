@@ -21,6 +21,13 @@ charset: "UTF-8"
 
 #template: "simple"
 
+session: "YAML"
+engines:
+     session:
+     YAML:
+          session_dir: "/tmp/dancer-sessions"
+#          cookie_domain: ".ylukashov.tk"
+
 template: "template_toolkit"
 engines:
   template:
@@ -29,7 +36,9 @@ engines:
       INCLUDE_PATH: 'views'
       start_tag: '<%'
       end_tag:   '%>'
-
+  
+  
+  
 plugins:
    Database:
       driver: 'mysql'
@@ -45,3 +54,9 @@ plugins:
       on_connect_do: ["SET NAMES 'utf8'", "SET CHARACTER SET 'utf8'" ]
       log_queries: 1
       #handle_class: 'My::Super::Sexy::Database::Handle'
+
+
+     
+
+   
+

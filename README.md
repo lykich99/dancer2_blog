@@ -22,19 +22,17 @@ This is not finished relise. Every day more code. <a href="ylukashov.tk"> This e
      \</VirtualHost\><br>
      <br>
    B. Create table for mysql.<br>
-      <br>
-      CREATE TABLE `blog` (<br>
-		  `id` int(10) NOT NULL,<br>
-		  `h1` char(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,<br>
-		  `img_link` char(20) NOT NULL,<br>
-		  `date` datetime NOT NULL,<br>
-		  `small_post` varchar(255) NOT NULL,<br>
-		  `big_post` text NOT NULL,<br>
-		  `categories_id` int(10) NOT NULL,<br>
-		  KEY `date` (`date`),<br>
-		  KEY `categories_id` (`categories_id`)<br>
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Content for blog';<br>
-        <br>
+      CREATE TABLE `blog` (
+		  `id` int(10) NOT NULL,
+		  `h1` char(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+		  `img_link` char(20) NOT NULL,
+		  `date` datetime NOT NULL,
+		  `small_post` varchar(255) NOT NULL,
+		  `big_post` text NOT NULL,
+		  `categories_id` int(10) NOT NULL,
+		  KEY `date` (`date`),
+		  KEY `categories_id` (`categories_id`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Content for blog';
         
         CREATE TABLE `categories` (
 		  `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -43,7 +41,15 @@ This is not finished relise. Every day more code. <a href="ylukashov.tk"> This e
   		   UNIQUE KEY `categories_name` (`categories_name`)
             ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
         
-        
+        CREATE TABLE `users` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  `username` varchar(32) NOT NULL,
+                  `password` varchar(100) DEFAULT NULL,
+                   PRIMARY KEY (`id`),
+                   UNIQUE KEY `username` (`username`)
+               ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8      
+
+  
       For test you can use the data dump blog.sql<br>
        mysql -u user -p blog < blog.sql<br>
       <br>
@@ -53,6 +59,11 @@ This is not finished relise. Every day more code. <a href="ylukashov.tk"> This e
        host: 'you host'<br>
        username: 'user for connect'<br>
        password: 'password for conect'<br>
+
+    D. For access to /admin  I use Dancer2::Plugin::Passphrase.
+       You have to create login and password and add to table users.
+       You can make this uncomment route /secret in App.pm.
+
       
  
       

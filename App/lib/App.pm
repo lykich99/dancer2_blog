@@ -1,20 +1,27 @@
 package App;
 use Dancer2;
+use Dancer2::Plugin::Passphrase;
+use Dancer2::Plugin::Auth::Tiny;
 use Dancer2::Plugin::Database;
+#use Dancer2::Session::YAML;
+use Dancer2::Core::Session;
 use Data::Page;
 use Dancer2::Logger::Console;
 use Data::Pageset::Render;
 use Data::Dumper;
 
+
 our $VERSION = '0.1';
 our $logger = Dancer2::Logger::Console->new;
-
 
 
 get '/' => sub {
 	my $last_post = database->prepare( 'SELECT * FROM blog order by date DESC limit 3' );
 	   $last_post->execute() or die $DBI::errstr;
-	   
+#	my $session = session;  
+#	   $session->write('test_var', 'ky-ky');
+#	print Dumper($session);
+	
     template 'index', {
 		'css_active' => 'about',
 		'breadcrumb' => 'About Me',
@@ -28,7 +35,9 @@ get '/blog' => sub {
     my $pg = database->prepare( 'select count(*) from blog' );
        $pg->execute() or die $DBI::errstr;
     my ($pg_count) = $pg->fetchrow_array;
-    my $carent_page = '1';    
+    my $carent_page = '1';  
+    #my $session = session;   
+   # print"blog ses :".Dumper($session);
     my $pager = get_paginator( $pg_count,4,1);
     my $href_p = "./blog/page/";	
     template 'index', {
@@ -114,18 +123,57 @@ get '/blog/archive/:name' => sub {
 	   'breadcrumb' => 'Archive',
 	   'rows_arch'  => $s_arch->fetchall_hashref('id')
     }
-
-
 };
 
 get '/contact' => sub {
    template 'index', {
 	  'css_active' => 'contact',
 	   'breadcrumb' => 'Contact'	
-		
-		
    }
 };
+
+
+get '/admin' => needs login => sub {
+    template 'admin', {},{ layout => 'admin' }	
+
+
+};
+
+get '/login' => sub {	
+    template 'login', {},{ layout => 'main' }	
+};
+
+post '/login' => sub {
+    my $username  = param('username');
+    my $sql = "SELECT password FROM users WHERE username='$username'";
+    my $sth = database->prepare( $sql ); 
+      $sth->execute() or die $DBI::errstr;
+    my $pass_from_db = $sth->fetch->[0];  
+    if ( passphrase( param('password') )->matches( $pass_from_db ) ) {
+        session user => $username;
+  	    debug( "Login succsess" .$username );
+  	    redirect '/admin';
+     } else {
+		debug( "Login failed - password incorrect for " .$username );
+        redirect '/login';
+     }
+};
+#*******************************************************************************
+# Uncomment this use route /secret and create login and password.              #
+# This step add data login and password for table users                        #
+#*******************************************************************************
+#get '/secret' => sub {
+#	template 'secret', {},{ layout => 'main' }	
+#};
+
+#post '/secret' => sub {
+#    my $username  = param('username');
+#    my $password  = passphrase( param('password') )->generate;
+#    my $pass = $password->rfc2307();
+#    my $sth = database->prepare( "INSERT INTO users VALUES('','$username','$pass')" );
+#       $sth->execute() or die $DBI::errstr;
+#       return "Password create";
+#};
 
 sub get_paginator {
 
@@ -141,7 +189,6 @@ sub get_paginator {
     return $pager;
 
 }
-
 
 
 true;

@@ -21,6 +21,8 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<% request.uri_base %>/css/styles_form.css" />    
+	
+	<script src="//use.edgefonts.net/bebas-neue.js"></script>
 
 	<link rel="stylesheet" href="<% request.uri_base %>/css/font-awesome.min.css" />
 	
