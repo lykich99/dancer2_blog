@@ -14,25 +14,16 @@
     <meta name="description" content="Yuriy Lukashov - blog engine">
     <meta name="author" content="Yuriy Lukashov">
 
-    <title>Yuriy Lukashov - blog engine</title>
+    <title>Blog engine Admin panel</title>
 
     <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="<% request.uri_base %>/css/bootstrap.css" />
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="<% request.uri_base %>/css/styles_form.css" />    
-	
-	<script src="//use.edgefonts.net/bebas-neue.js"></script>
-
-	<link rel="stylesheet" href="<% request.uri_base %>/css/font-awesome.min.css" />
-	
-	<script type="text/javascript" src="<% request.uri_base %>/javascripts/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-	
-	<!-- Javascripts -->       
+    <link rel="stylesheet" href="<% request.uri_base %>/javascripts/bootstrap.css" />
+    
     <script type="text/javascript" src="<% request.uri_base %>/javascripts/jquery.js"></script>
-    <script type="text/javascript" src="<% request.uri_base %>/javascripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="<% request.uri_base %>/javascripts/ext/ext-dev.js"></script>
+    <script type="text/javascript" src="<% request.uri_base %>/javascripts/bootstrap.js"></script>
+    <script type="text/javascript" src="<% request.uri_base %>/javascripts/app.js"></script>
 
-	
 </head>
 
 
@@ -40,8 +31,6 @@
    
     <% content %>
    
-	<!-- Footer -->
-
 	    
 </body>
 </html>

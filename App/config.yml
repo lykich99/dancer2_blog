@@ -21,11 +21,11 @@ charset: "UTF-8"
 
 #template: "simple"
 
-session: "YAML"
-engines:
-     session:
-     YAML:
-          session_dir: "/tmp/dancer-sessions"
+#session: "YAML"
+#engines:
+#     session:
+#     YAML:
+#          session_dir: "/tmp/dancer-sessions"
 #          cookie_domain: ".ylukashov.tk"
 
 template: "template_toolkit"

@@ -2,13 +2,15 @@ package App;
 use Dancer2;
 use Dancer2::Plugin::Passphrase;
 use Dancer2::Plugin::Auth::Tiny;
+use Dancer2::Core::Session;
 use Dancer2::Plugin::Database;
 #use Dancer2::Session::YAML;
-use Dancer2::Core::Session;
 use Data::Page;
 use Dancer2::Logger::Console;
 use Data::Pageset::Render;
 use Data::Dumper;
+#use Dancer2::Plugin::Auth::Extensible;
+#use Dancer2::Plugin::Auth::Extensible::Provider::Database;
 
 
 our $VERSION = '0.1';
@@ -158,6 +160,7 @@ post '/login' => sub {
         redirect '/login';
      }
 };
+
 #*******************************************************************************
 # Uncomment this use route /secret and create login and password.              #
 # This step add data login and password for table users                        #
