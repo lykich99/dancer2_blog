@@ -1,5 +1,7 @@
 # dancer2_blog
-Dancer2 blog, responsive web design bootstrap
+Dancer2 blog, responsive web design bootstrap, Admin for ExtJS 4.2 mvc<br>
+Admin access for url ./admin<br>
+Access for ./admin through ./login<br>
 #-------------------------------------------
 
 This is not finished relise. Every day more code. <a href="ylukashov.tk"> This example you can see.</a>
