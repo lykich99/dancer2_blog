@@ -1,5 +1,7 @@
 package App;
 use Dancer2;
+#use JSON;
+use Dancer2::Plugin::Ajax;
 use Dancer2::Plugin::Passphrase;
 use Dancer2::Plugin::Auth::Tiny;
 use Dancer2::Core::Session;
@@ -12,11 +14,37 @@ use Data::Dumper;
 #use Dancer2::Plugin::Auth::Extensible;
 #use Dancer2::Plugin::Auth::Extensible::Provider::Database;
 
+#set serializer => 'JSON';
 
 our $VERSION = '0.1';
 our $logger = Dancer2::Logger::Console->new;
 
 
+
+ajax ['get', 'post' ] => '/crud/*' => sub { 
+    my %params  = params(); 
+    my ( $actions ) = splat;
+    my $page  = $params{'page'};
+    my $limit = $params{'limit'};
+    my $start = $params{'start'};   
+    my $sql;  
+    if ( $actions eq 'read' ) {
+	   $sql = "SELECT * FROM blog ORDER by date DESC";	
+	 } elsif ( $actions eq 'update' ) {
+	   $sql = "UPDATE blog SET";	 
+	 } elsif ( $actions eq 'create' ) {
+	   $sql = "INSERT INTO blog VALUES()";	 
+	 } else {
+	   $sql = "DELETE FROM blog WHERE id=''";
+     }	 
+    my $st = database->prepare( $sql );
+       $st->execute() or die $DBI::errstr;
+	my $r = $st->fetchall_hashref('id');	 	  	 	
+    #return to_json { "success" => true, total =>'100', blogrow => { 'id' => 'rrrr', 'h1' => 'gggg','img_link' => 'asdfdsf', 'date' => 'sdfdsf', 'small_post' => 'sdfsdfd', 'big_post' => 'sss', 'categories_id' => 'dfdf'} };
+    #return to_json { "success" => true, total =>'100', blogrow => [ {'id' => '1', 'h1' => 'gggg'},{'id' => '2', 'h1' => 'poo'} ] };
+    return to_json { "success" => true, total =>'100', blogrow => [ %$r] };
+};
+    
 get '/' => sub {
 	my $last_post = database->prepare( 'SELECT * FROM blog order by date DESC limit 3' );
 	   $last_post->execute() or die $DBI::errstr;
@@ -135,9 +163,9 @@ get '/contact' => sub {
 };
 
 
-get '/admin' => needs login => sub {
+#get '/admin' => needs login => sub {
+get '/admin' => sub {	
     template 'admin', {},{ layout => 'admin' }	
-
 
 };
 

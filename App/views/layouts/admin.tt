@@ -6,8 +6,6 @@
 <html lang="en">	
 	
 <head>
-	
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,12 +15,25 @@
     <title>Blog engine Admin panel</title>
 
     <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="<% request.uri_base %>/javascripts/bootstrap.css" />
-    
-    <script type="text/javascript" src="<% request.uri_base %>/javascripts/jquery.js"></script>
-    <script type="text/javascript" src="<% request.uri_base %>/javascripts/ext/ext-dev.js"></script>
-    <script type="text/javascript" src="<% request.uri_base %>/javascripts/bootstrap.js"></script>
+    <link rel="stylesheet" href="<% request.uri_base %>/javascripts/ext/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css" href="<% request.uri_base %>/javascripts/ext/resources/css/app.css">
+
+    <script type="text/javascript" src="<% request.uri_base %>/javascripts/ext/ext-all.js"></script>
+
     <script type="text/javascript" src="<% request.uri_base %>/javascripts/app.js"></script>
+    
+            <style>
+            .x-grid-checkheader
+            {
+                background: url('resources/images/unchecked.gif') no-repeat center center;
+            }
+            .x-grid-checkheader-checked
+            {
+                background: url('resources/images/checked.gif') no-repeat  center center;
+            }
+        </style>
+    
+    
 
 </head>
 
