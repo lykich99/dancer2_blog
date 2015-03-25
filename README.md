@@ -21,19 +21,20 @@ This is not finished relise. Every day more code. <a href="ylukashov.tk"> This e
           ScriptAlias / /home/www/ylukashov/ylukashov.tk/www/App/public/dispatch.fcgi/<br>
      \</VirtualHost\><br>
      <br>
-   B. Create table for mysql.<br>
-      CREATE TABLE `blog` (
-		  `id` int(10) NOT NULL,
-		  `h1` char(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-		  `img_link` char(20) NOT NULL,
-		  `date` datetime NOT NULL,
-		  `small_post` varchar(255) NOT NULL,
-		  `big_post` text NOT NULL,
-		  `categories_id` int(10) NOT NULL,
-		  KEY `date` (`date`),
-		  KEY `categories_id` (`categories_id`)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Content for blog';
-        
+   B. Create table for mysql.
+  
+         CREATE TABLE `blog` (
+               `id` int(10) NOT NULL,
+               `h1` char(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+               `img_link` char(40) NOT NULL,
+               `date` datetime NOT NULL,
+               `small_post` varchar(255) NOT NULL,
+               `big_post` text NOT NULL,
+               `categories_id` int(10) NOT NULL,
+               KEY `date` (`date`),
+               KEY `categories_id` (`categories_id`)
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Content for blog' 
+              
         CREATE TABLE `categories` (
 		  `id` int(10) NOT NULL AUTO_INCREMENT,
 	           `categories_name` char(20) NOT NULL,
