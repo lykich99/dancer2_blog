@@ -1,6 +1,5 @@
 package App;
 use Dancer2;
-#use JSON;
 use Dancer2::Plugin::Ajax;
 use Dancer2::Plugin::Passphrase;
 use Dancer2::Plugin::Auth::Tiny;
@@ -14,8 +13,6 @@ use Data::Dumper;
 #use Dancer2::Plugin::Auth::Extensible;
 #use Dancer2::Plugin::Auth::Extensible::Provider::Database;
 
-#set serializer => 'JSON';
-
 our $VERSION = '0.1';
 our $logger = Dancer2::Logger::Console->new;
 
@@ -26,10 +23,11 @@ ajax ['get', 'post' ] => '/crud/*' => sub {
     my ( $actions ) = splat;
     my $page  = $params{'page'};
     my $limit = $params{'limit'};
-    my $start = $params{'start'};   
+    my $start = $params{'start'};  
+    my $between_two = $start + $limit; 
     my $sql;  
     if ( $actions eq 'read' ) {
-	   $sql = "SELECT * FROM blog ORDER by date DESC";	
+	   $sql = "SELECT * FROM blog WHERE id BETWEEN '$start' AND '$between_two' ORDER by date DESC";	
 	 } elsif ( $actions eq 'update' ) {
 	   $sql = "UPDATE blog SET";	 
 	 } elsif ( $actions eq 'create' ) {
@@ -39,10 +37,15 @@ ajax ['get', 'post' ] => '/crud/*' => sub {
      }	 
     my $st = database->prepare( $sql );
        $st->execute() or die $DBI::errstr;
-	my $r = $st->fetchall_hashref('id');	 	  	 	
+	#my $r = $st->fetchall_hashref('id');	 	  	 	
+    my $r = $st->fetchall_arrayref({});
+    my $stc = database->prepare( "SELECT COUNT(*) FROM blog ORDER by date DESC" );
+       $stc->execute() or die $DBI::errstr;
+    my ( $total ) = $stc->fetchrow_array;
     #return to_json { "success" => true, total =>'100', blogrow => { 'id' => 'rrrr', 'h1' => 'gggg','img_link' => 'asdfdsf', 'date' => 'sdfdsf', 'small_post' => 'sdfsdfd', 'big_post' => 'sss', 'categories_id' => 'dfdf'} };
     #return to_json { "success" => true, total =>'100', blogrow => [ {'id' => '1', 'h1' => 'gggg'},{'id' => '2', 'h1' => 'poo'} ] };
-    return to_json { "success" => true, total =>'100', blogrow => [ %$r] };
+    #return to_json { "success" => true, total =>'100', blogrow => [ %$r] };
+    return to_json { "success" => true, total =>$total, blogrow => [ @$r] };
 };
     
 get '/' => sub {
@@ -163,8 +166,8 @@ get '/contact' => sub {
 };
 
 
-#get '/admin' => needs login => sub {
-get '/admin' => sub {	
+get '/admin' => needs login => sub {
+#get '/admin' => sub {	
     template 'admin', {},{ layout => 'admin' }	
 
 };

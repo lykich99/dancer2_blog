@@ -44,36 +44,6 @@ Ext.define('AM.view.BlogGrid', {
 
 
     initComponent: function() {
-       /* this.columns = [
-        {
-            header: 'id',  
-            dataIndex: 'id',  
-            width: 40
-        },{
-            header: 'h1', 
-            dataIndex: 'h1', 
-            width: 180
-        },{
-            header: 'img_link', 
-            dataIndex: 'img_link', 
-            width: 120
-        },{
-            header: 'date', 
-            dataIndex: 'date', 
-            width: 80
-        },{
-            header: 'small_post', 
-            dataIndex: 'small_post', 
-            width: 200
-        },{
-            header: 'big_post', 
-            dataIndex: 'big_post', 
-            width: 630
-        },{
-            header: 'categories_id', 
-            dataIndex: 'categories_id', 
-            flex: 1 
-        }];*/
          
         this.dockedItems = [{
             xtype: 'toolbar',
