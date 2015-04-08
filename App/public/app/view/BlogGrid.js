@@ -48,9 +48,9 @@ Ext.define('AM.view.BlogGrid', {
         this.dockedItems = [{
             xtype: 'toolbar',
             items: [{
-                iconCls: 'icon-save',
+                iconCls: 'icon-add',
                 itemId: 'add',
-                text: 'Save',
+                text: 'Add',
                 action: 'add'
             },{
                 iconCls: 'icon-delete',

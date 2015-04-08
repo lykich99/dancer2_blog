@@ -20,12 +20,9 @@ Ext.define('AM.view.GridForm', {
                 border: false,
                 style: 'background-color: #fff;',
                 width: 750,
-               //height: 550,
                 fieldDefaults: {
-                    //anchor: '100%',
-                    //labelWidth: 75,
                     labelAlign: 'left',
-                    allowBlank: false,
+                    //allowBlank: false,
                     combineErrors: true,
                     msgTarget: 'side'
                 },
@@ -40,24 +37,30 @@ Ext.define('AM.view.GridForm', {
                      {
                         xtype: 'textfield',
                         name : 'h1',
-                        fieldLabel: 'h1'
+                        fieldLabel: 'h1',
+                        allowBlank: false
                      },
                      {
                         xtype: 'textfield',
+                        id: 'img_link',
                         name : 'img_link',
-                        fieldLabel: 'img_link'
+                        fieldLabel: 'img_link',
+                        allowBlank: false
                       },
                       {
                         xtype: 'textfield',
+                        id:'date',
                         name : 'date',
-                        fieldLabel: 'date'
+                        fieldLabel: 'date',
+                         hidden: true
                       },
                        {
                         xtype: 'textareafield',
                         name : 'small_post',
                         fieldLabel: 'small_post',
                         anchor    : '100%',
-					    grow      : true
+					    grow      : true,
+					    allowBlank: false
                       },{
 						title: 'HTML Editor',
 						anchor: '100%',
@@ -70,24 +73,19 @@ Ext.define('AM.view.GridForm', {
                         name : 'categories_id',
                         fieldLabel: 'categories_id',
                         anchor    : '100%',
-					    grow      : true  
-					  },/*{
-                        xtype: 'filefield',
-                        id: 'form-file',
-                        emptyText: 'Select an image',
-                        fieldLabel: 'Photo',
-                        name: 'photo-path',
-                        buttonText: '',
-                        buttonConfig: {
-                            iconCls: 'icon-add'
-                         }
-		               },*/      
+					    grow      : true,
+					    allowBlank: false
+					  },     
 		               {
 						 margin: '0 0 0 105',
 						 xtype: 'button',
+						 hidden: true,
+						 id:'addfile',
+						 itemId: 'addfile',
+						 action: 'addfile',
 						 text : 'Add file',
 						 iconCls: 'icon-add' 
-					    }
+					    } 	
                              			    	  
                    ]
             }

@@ -268,11 +268,10 @@
 					</form>
 						<h4>Recent Posts</h4>
 						<ul class="recent-posts">
-                           <% FOREACH r = rows_post4.keys.sort.reverse %>
-							  <li><a href="/blog/<% rows_post4.$r.date %>"> <% rows_post4.$r.h1 %> </a></li>
+						   <% FOREACH r IN rows_post4  %>
+						    <li><a href="/blog/<% r.date %>"> <% r.h1 %> </a></li>
 						   <% END %>
 						</ul>
-						
 						<h4>Categories</h4>
 						<ul class="blog-categories">
 							<% FOREACH v IN rows_c.values %>
@@ -284,8 +283,6 @@
                            <% FOREACH va IN rows_ar.values %> 
 							<li><a href="/blog/archive/<% va.ym %>"> <% va.ym %> </a></li>
                            <% END %>
-							
-
 						</ul>
 					</div>
 					<!-- End Sidebar -->

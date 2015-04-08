@@ -1,5 +1,6 @@
 package App;
 use Dancer2;
+use JSON qw( decode_json );
 use Dancer2::Plugin::Ajax;
 use Dancer2::Plugin::Passphrase;
 use Dancer2::Plugin::Auth::Tiny;
@@ -10,42 +11,59 @@ use Data::Page;
 use Dancer2::Logger::Console;
 use Data::Pageset::Render;
 use Data::Dumper;
+
 #use Dancer2::Plugin::Auth::Extensible;
 #use Dancer2::Plugin::Auth::Extensible::Provider::Database;
 
 our $VERSION = '0.1';
 our $logger = Dancer2::Logger::Console->new;
 
+post '/upload' => needs login => sub {
+    my $all_uploads  = request->uploads;
+    my $upload = $all_uploads->{'photo-path'};
+    my $blog_img_dir = config->{public_dir}."/img/blog/";
+    my $result =  $upload->copy_to( $blog_img_dir.$upload->filename ); 
+    return to_json { "success" => true, "result" => $result, "file" => $upload->filename };
+};
 
-
-ajax ['get', 'post' ] => '/crud/*' => sub { 
+ajax ['get', 'post' ] => '/crud/*' => needs login => sub { 
     my %params  = params(); 
+      
     my ( $actions ) = splat;
-    my $page  = $params{'page'};
-    my $limit = $params{'limit'};
-    my $start = $params{'start'};  
-    my $between_two = $start + $limit; 
     my $sql;  
+    #********** READ DATA *************************************
     if ( $actions eq 'read' ) {
-	   $sql = "SELECT * FROM blog WHERE id BETWEEN '$start' AND '$between_two' ORDER by date DESC";	
+		  my $page  = $params{'page'};
+          my $limit = $params{'limit'};
+          my $start = $params{'start'};  
+          my $between_two = $start + $limit; 
+	      $sql = "SELECT * FROM blog WHERE id BETWEEN '$start' AND '$between_two' ORDER by date DESC";
+	      my $st = database->prepare( $sql );
+             $st->execute() or die $DBI::errstr;	 	  	 	
+          my $r = $st->fetchall_arrayref({});
+          my $stc = database->prepare( "SELECT COUNT(*) FROM blog ORDER by date DESC" );
+             $stc->execute() or die $DBI::errstr;
+          my ( $total ) = $stc->fetchrow_array;
+           return to_json { "success" => true, total =>$total, blogrow => [ @$r] };
 	 } elsif ( $actions eq 'update' ) {
 	   $sql = "UPDATE blog SET";	 
+    #******** INSERT DATA ************************************ 	   
 	 } elsif ( $actions eq 'create' ) {
-	   $sql = "INSERT INTO blog VALUES()";	 
+		  my $decoded = decode_json( %params->{'blogrow'});    
+	  	  #print Dumper($decoded);
+	  	  my $id              = $decoded->{'id'};
+	  	  my $h1              = $decoded->{'h1'};
+	  	  my $img_link       = $decoded->{'img_link'};
+	  	  my $date            = $decoded->{'date'};
+	  	  my $small_post     = $decoded->{'small_post'};
+	  	  my $big_post       = $decoded->{'big_post'};
+	  	  my $categories_id  = $decoded->{'categories_id'};  	  
+             database->do("INSERT INTO blog VALUES( '','$h1','$img_link',NOW(),'$small_post','$big_post','$categories_id')");
+	      return to_json { "success" => true, categories_id =>$categories_id };
 	 } else {
 	   $sql = "DELETE FROM blog WHERE id=''";
      }	 
-    my $st = database->prepare( $sql );
-       $st->execute() or die $DBI::errstr;
-	#my $r = $st->fetchall_hashref('id');	 	  	 	
-    my $r = $st->fetchall_arrayref({});
-    my $stc = database->prepare( "SELECT COUNT(*) FROM blog ORDER by date DESC" );
-       $stc->execute() or die $DBI::errstr;
-    my ( $total ) = $stc->fetchrow_array;
-    #return to_json { "success" => true, total =>'100', blogrow => { 'id' => 'rrrr', 'h1' => 'gggg','img_link' => 'asdfdsf', 'date' => 'sdfdsf', 'small_post' => 'sdfsdfd', 'big_post' => 'sss', 'categories_id' => 'dfdf'} };
-    #return to_json { "success" => true, total =>'100', blogrow => [ {'id' => '1', 'h1' => 'gggg'},{'id' => '2', 'h1' => 'poo'} ] };
-    #return to_json { "success" => true, total =>'100', blogrow => [ %$r] };
-    return to_json { "success" => true, total =>$total, blogrow => [ @$r] };
+    
 };
     
 get '/' => sub {
@@ -84,17 +102,27 @@ get '/blog' => sub {
 
 get '/blog/page/:name' => sub {
     my $param_page = params->{name};   
-    my $step_p;
-    if( $param_page != 1 ) {
-        $step_p = ( $param_page - 1 )*4;
-     } else {
-		$step_p = 1;
-	 }	 
-    my $sth = database->prepare( "SELECT * FROM blog WHERE id >= '$step_p' ORDER BY date limit 4" );
-       $sth->execute() or die $DBI::errstr;
+    my ( $step_p, $sql );
+    #********* All blog rows ********************************
     my $pg = database->prepare( 'select count(*) from blog' );
        $pg->execute() or die $DBI::errstr;
     my ($pg_count) = $pg->fetchrow_array;
+    #********************************************************
+    
+    if( $param_page != 1 ) {
+        my ( $limit );
+        $step_p = ( $pg_count - (4*$param_page) );
+        if ( $step_p <= 0 ) {
+			$step_p = 4;	
+		} 		
+        $sql = "SELECT * FROM blog ORDER BY date DESC limit $step_p,4";
+     } else {
+		$step_p = 1;
+	    $sql = "SELECT * FROM blog WHERE id >= '$step_p' ORDER BY date DESC limit 4";	
+	 }	 
+	#print "sql = ".Dumper($sql); 
+    my $sth = database->prepare( $sql );
+       $sth->execute() or die $DBI::errstr;
     my $carent_page = '1';    
     my $pager = get_paginator( $pg_count,4,$param_page);
     my $href_p = "";
@@ -126,7 +154,7 @@ get '/blog/:name' => sub {
 	  'breadcrumb' => 'Blog post',
 	  'rows'       => $post->fetchrow_hashref,
 	  'rows_c'     => $cat->fetchall_hashref('id'), 
-	  'rows_post4' => $post4->fetchall_hashref('h1'),
+	  'rows_post4' => $post4->fetchall_arrayref({}),
 	  'rows_ar'    => $p_ar->fetchall_hashref('ym'),
 	  'href_b'     => $href_b
      }		    

@@ -23,16 +23,17 @@ DROP TABLE IF EXISTS `blog`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `blog` (
-  `id` int(10) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `h1` char(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `img_link` char(40) NOT NULL,
   `date` datetime NOT NULL,
   `small_post` varchar(255) NOT NULL,
   `big_post` text NOT NULL,
   `categories_id` int(10) NOT NULL,
+  PRIMARY KEY (`id`),
   KEY `date` (`date`),
   KEY `categories_id` (`categories_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Content for blog';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='Content for blog';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
