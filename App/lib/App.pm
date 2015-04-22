@@ -46,7 +46,20 @@ ajax ['get', 'post' ] => '/crud/*' => needs login => sub {
           my ( $total ) = $stc->fetchrow_array;
            return to_json { "success" => true, total =>$total, blogrow => [ @$r] };
 	 } elsif ( $actions eq 'update' ) {
-	   $sql = "UPDATE blog SET";	 
+    #********* UPDATE DATA ***********************************
+          my $decoded = decode_json( %params->{'blogrow'});    
+	  	  my $id              = $decoded->{'id'};
+	  	  my $h1              = $decoded->{'h1'};
+	  	  my $img_link       = $decoded->{'img_link'};
+	  	  my $date            = $decoded->{'date'};
+	  	  my $small_post     = $decoded->{'small_post'};
+	  	  my $big_post       = $decoded->{'big_post'};
+	  	  my $categories_id  = $decoded->{'categories_id'}; 
+             $sql = "UPDATE blog SET  h1= '$h1', img_link = '$img_link',date = '$date', small_post = '$small_post', big_post = '$big_post',  categories_id = '$categories_id' WHERE  id ='$id'";
+    	  my $st = database->prepare( $sql );
+             $st->execute() or die $DBI::errstr;       
+          return to_json { "success" => true, categories_id =>$categories_id };
+    
     #******** INSERT DATA ************************************ 	   
 	 } elsif ( $actions eq 'create' ) {
 		  my $decoded = decode_json( %params->{'blogrow'});    
