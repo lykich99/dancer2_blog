@@ -4,7 +4,7 @@ Admin access for url ./admin<br>
 Access for ./admin through ./login<br>
 #-------------------------------------------
 
-This is not finished relise. Every day more code. <a href="ylukashov.tk"> This example you can see.</a>
+This is not finished relise. Every day more code. <a href="http://ylukashov.tk"> This example you can see.</a>
 
 
 #----------------------------------------------
@@ -63,13 +63,13 @@ This is not finished relise. Every day more code. <a href="ylukashov.tk"> This e
        host: 'you host'<br>
        username: 'user for connect'<br>
        password: 'password for conect'<br>
-
+       
     D. For access to /admin  I use Dancer2::Plugin::Passphrase.
        You have to create login and password and add to table users.
-       You can make this uncomment route /secret in App.pm.
-       
-    E. For the comment I use disqus. You can make account this <a href="https://disqus.com/">disqus</a> and
-       change javascript code in the index.tt for you javacript code.
+       You can make this uncomment route /secret in App.pm.<br>
+     
+    E. For the comment I use disqus. You can make account this disqus 
+       and change javascript code in the index.tt for you javacript code.
 
       
  
