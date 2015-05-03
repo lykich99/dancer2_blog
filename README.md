@@ -67,6 +67,9 @@ This is not finished relise. Every day more code. <a href="ylukashov.tk"> This e
     D. For access to /admin  I use Dancer2::Plugin::Passphrase.
        You have to create login and password and add to table users.
        You can make this uncomment route /secret in App.pm.
+       
+    E. For the comment I use disqus. You can make account this <a href="https://disqus.com/">disqus</a> and
+       change javascript code in the index.tt for you javacript code.
 
       
  
