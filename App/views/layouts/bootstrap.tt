@@ -14,7 +14,7 @@
     <meta name="description" content="Yuriy Lukashov - blog engine">
     <meta name="author" content="Yuriy Lukashov">
 
-    <title>Yuriy Lukashov - blog engine</title>
+    <title><% title %></title>
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="<% request.uri_base %>/css/bootstrap.css" />

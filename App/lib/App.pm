@@ -9,6 +9,7 @@ use Dancer2::Plugin::Database;
 #use Dancer2::Session::YAML;
 use Data::Page;
 use Dancer2::Logger::Console;
+use Dancer2::Logger::Console::Colored;
 use Data::Pageset::Render;
 use Data::Dumper;
 
@@ -16,7 +17,9 @@ use Data::Dumper;
 #use Dancer2::Plugin::Auth::Extensible::Provider::Database;
 
 our $VERSION = '0.1';
-our $logger = Dancer2::Logger::Console->new;
+our $logger = Dancer2::Logger::Console::Colored->new;
+our $title = "Yuriy Lukashov - blog engine";     
+
 
 post '/upload' => needs login => sub {
     my $all_uploads  = request->uploads;
@@ -85,32 +88,32 @@ get '/' => sub {
 #	my $session = session;  
 #	   $session->write('test_var', 'ky-ky');
 #	print Dumper($session);
-	
     template 'index', {
 		'css_active' => 'about',
 		'breadcrumb' => 'About Me',
 		'rows'       => $last_post->fetchall_hashref('date'),
+		'title'      => $title
 	}
 };
 
 get '/blog' => sub {
+		
     my $sth = database->prepare( 'SELECT * FROM blog order by date DESC limit 4' );
 	   $sth->execute() or die $DBI::errstr;
     my $pg = database->prepare( 'select count(*) from blog' );
        $pg->execute() or die $DBI::errstr;
     my ($pg_count) = $pg->fetchrow_array;
     my $carent_page = '1';  
-    #my $session = session;   
-   # print"blog ses :".Dumper($session);
     my $pager = get_paginator( $pg_count,4,1);
     my $href_p = "./blog/page/";	
     template 'index', {
 	  'css_active' => 'blog',
 	  'breadcrumb' => 'Blog',	
-	  'rows'       => $sth->fetchall_hashref('id'),
+	  'rows'       => $sth->fetchall_arrayref({}),
 	  'pager'      => $pager,
-	  'href_p'     => $href_p
-    }
+	  'href_p'     => $href_p,
+	  'title'      => $title
+    }   
 };
 
 get '/blog/page/:name' => sub {
@@ -121,46 +124,51 @@ get '/blog/page/:name' => sub {
        $pg->execute() or die $DBI::errstr;
     my ($pg_count) = $pg->fetchrow_array;
     #********************************************************
-    
+   
     if( $param_page != 1 ) {
-        my ( $limit );
-        $step_p = ( $pg_count - (4*$param_page) );
+        my $limit = 4;         # limit blog post for page
+        $step_p = ( $limit * $param_page ) - $limit;
         if ( $step_p <= 0 ) {
 			$step_p = 4;	
 		} 		
         $sql = "SELECT * FROM blog ORDER BY date DESC limit $step_p,4";
+        $logger->debug($sql); 
      } else {
 		$step_p = 1;
 	    $sql = "SELECT * FROM blog WHERE id >= '$step_p' ORDER BY date DESC limit 4";	
-	 }	 
-	#print "sql = ".Dumper($sql); 
+	 }	  
     my $sth = database->prepare( $sql );
        $sth->execute() or die $DBI::errstr;
     my $carent_page = '1';    
     my $pager = get_paginator( $pg_count,4,$param_page);
     my $href_p = "";
     my $h_b = "blog/";
+    local $title = "Yuriy Lukashov - blog page ".$param_page;  
     template 'index', {
 	  'css_active' => 'blog',
 	  'breadcrumb' => 'Blog',	
-	  'rows'       => $sth->fetchall_hashref('id'),
+	  'rows'       => $sth->fetchall_arrayref({}),
 	  'pager'      => $pager,
 	  'hb'         => $h_b,
-	  'href_p'     => $href_p
-
+	  'href_p'     => $href_p,
+	  'title'      => $title
     }   
 };
 
 get '/blog/:name' => sub {
 	 my $post_date = params->{name};
 	 my $post = database->prepare( "SELECT * FROM blog WHERE date = '$post_date'" );
-	    $post->execute() or die $DBI::errstr;
+	    $post->execute() or die $DBI::errstr;      
      my $cat = database->prepare( "SELECT * FROM categories" );
         $cat->execute() or die $DBI::errstr;
      my $post4 = database->prepare( "SELECT h1,date FROM blog ORDER by date DESC limit 4" );  
         $post4->execute() or die $DBI::errstr;
      my $p_ar = database->prepare( "SELECT DISTINCT DATE_FORMAT(date,'%M %Y') as ym FROM blog order by date limit 12" );
         $p_ar->execute() or die $DBI::errstr;
+     my $stm = database->prepare( "SELECT h1 FROM blog WHERE date = '$post_date'" );
+        $stm->execute() or die $DBI::errstr; 
+     my ( $title_meta ) = $stm->fetchrow_array;
+     local $title = $title." ".$title_meta;
      my $href_b = "blog/";   
 	 template 'index', {
 	  'css_active' => 'blog',
@@ -169,7 +177,8 @@ get '/blog/:name' => sub {
 	  'rows_c'     => $cat->fetchall_hashref('id'), 
 	  'rows_post4' => $post4->fetchall_arrayref({}),
 	  'rows_ar'    => $p_ar->fetchall_hashref('ym'),
-	  'href_b'     => $href_b
+	  'href_b'     => $href_b,
+	  'title'      => $title
      }		    
 	    
 };
@@ -177,25 +186,30 @@ get '/blog/:name' => sub {
 
 get '/blog/categories/:name' => sub {
     my $post_cat = params->{name};
-    my $p_cat = database->prepare( "SELECT h1,img_link,date,small_post,big_post FROM blog as b,categories as c WHERE b.categories_id=c.id AND c.categories_name='$post_cat' ORDER by date DESC limit 4" );
+    #TODO make pagination for this
+    my $p_cat = database->prepare( "SELECT h1,img_link,date,small_post,big_post FROM blog as b,categories as c WHERE b.categories_id=c.id AND c.categories_name='$post_cat' ORDER by date DESC" );
        $p_cat->execute() or die $DBI::errstr;
+    local $title = $title." categories ".$post_cat;    
     template 'index', {
 	  'css_active' => 'blog',
 	  'breadcrumb' => 'Categories',
-      'rows_cat'   => $p_cat->fetchall_hashref('h1')		
+      'rows_cat'   => $p_cat->fetchall_arrayref({}),
+      'title'      => $title		
     }
 };
 
 
 get '/blog/archive/:name' => sub {
+	#TODO make pagination for this
     my $post_arch = params->{name};    
-    my $s_arch = database->prepare( "SELECT * FROM blog WHERE date BETWEEN DATE_FORMAT((STR_TO_DATE('$post_arch','%M %Y')),'%Y-%m-01 00:00:00') AND DATE_FORMAT(LAST_DAY(DATE_FORMAT((STR_TO_DATE('$post_arch','%M %Y')),'%Y-%m-01 00:00:00')),'%Y-%m-%d 23:59:59') ORDER by date DESC limit 4" );
+    my $s_arch = database->prepare( "SELECT * FROM blog WHERE date BETWEEN DATE_FORMAT((STR_TO_DATE('$post_arch','%M %Y')),'%Y-%m-01 00:00:00') AND DATE_FORMAT(LAST_DAY(DATE_FORMAT((STR_TO_DATE('$post_arch','%M %Y')),'%Y-%m-01 00:00:00')),'%Y-%m-%d 23:59:59') ORDER by date DESC" );
        $s_arch->execute() or die $DBI::errstr;
-       
+    local $title = $title." archive ".$post_arch;   
     template 'index', {
 	   'css_active' => 'blog',
 	   'breadcrumb' => 'Archive',
-	   'rows_arch'  => $s_arch->fetchall_hashref('id')
+	   'rows_arch'  => $s_arch->fetchall_arrayref({}),
+	   'title'      => $title
     }
 };
 

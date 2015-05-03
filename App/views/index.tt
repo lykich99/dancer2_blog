@@ -50,13 +50,13 @@
 						<h2>He.</h2>
 						<h3>Few words...</h3>
 						<p>
-						    I Lykashov Yuriy.<br>
+						    I`m Lykashov Yuriy.<br>
 							One day I read article <a href="http://perlmaven.com/improve-your-communication-skills"> Improve your language and communication skills! </a>  and I have begun to do.
 						</p>
 						<p>
 						   I took for the basic <a href="http://perldancer.org">Dancer2</a> and started develop. I program and learning english :)<br>
 						   Code this the site you can get <a href="https://github.com/lykich99/dancer2_blog">github</a>.<br>
-						   My interest programmin, snowbording, motorbike and bee.
+						   My interest programmin, snowbording, motorbike and bees.
 						</p>
 
 
@@ -117,27 +117,27 @@
 				<div class="row">
 					<!-- Blog Post Excerpt -->
 					
-					<% FOREACH r = rows.keys.sort.reverse %>
+					<% FOREACH r IN rows %>
 					
 						<div class="col-sm-6">
 							<div class="blog-post blog-single-post">
 								<div class="single-post-title">
-									<h2><% rows.$r.h1 %></h2>
+									<h2><% r.h1 %></h2>
 								</div>
 
 								<div class="single-post-image">
-									<img src="<% rows.$r.img_link %>" alt="Post Title">
+									<img src="<% r.img_link %>" alt="Post Title">
 								</div>
 								
 								<div class="single-post-info">
-									<i class="glyphicon glyphicon-time"></i> <% rows.$r.date %> 
+									<i class="glyphicon glyphicon-time"></i> <% r.date %> 
 								</div>
 								
 								<div class="single-post-content">
 								   <p>
-                                       <% rows.$r.small_post %>
+                                       <% r.small_post %>
 								   </p>
-								<a href="/blog/<% rows.$r.date %>" class="btn">Read more</a>
+								<a href="/blog/<% r.date %>" class="btn">Read more</a>
 								</div>
 							</div>
 						</div>
@@ -180,27 +180,27 @@
 				<div class="row">
 					<!-- Blog Post Excerpt -->
 					
-					<% FOREACH r = rows_cat.keys.nsort.reverse %>
+					<% FOREACH r IN rows_cat %>
 					
 						<div class="col-sm-6">
 							<div class="blog-post blog-single-post">
 								<div class="single-post-title">
-									<h2><% rows_cat.$r.h1 %></h2>
+									<h2><% r.h1 %></h2>
 								</div>
 
 								<div class="single-post-image">
-									<img src="<% rows_cat.$r.img_link %>" alt="Post Title">
+									<img src="<% r.img_link %>" alt="Post Title">
 								</div>
 								
 								<div class="single-post-info">
-									<i class="glyphicon glyphicon-time"></i> <% rows_cat.$r.date %> 
+									<i class="glyphicon glyphicon-time"></i> <% r.date %> 
 								</div>
 								
 								<div class="single-post-content">
 								   <p>
-                                      <% rows_cat.$r.small_post %>
+                                      <% r.small_post %>
 								   </p>
-								<a href="/blog/<% rows_cat.$r.date %>" class="btn">Read more</a>
+								<a href="/blog/<% r.date %>" class="btn">Read more</a>
 								</div>
 							</div>
 						</div>
@@ -209,16 +209,6 @@
 					
 					<!-- End Blog Post Excerpt -->
 					
-							<!-- Pagination -->
-							 <% IF pg_count > 4 %>
-								<div class="pagination-wrapper ">
-									<ul class="pagination pagination-sm">
-										<li class="disabled"><a href="#">Previous</a></li>
-										<li class="active"><a href="/blog">1</a></li>
-										<li class="disabled" ><a href="#">Next</a></li>
-									</ul>
-								</div>				
-                             <% END %>
 				</div>
 			</div>
 	    </div>
@@ -253,6 +243,42 @@
 					
 					   </div>
 			 </div>
+			 
+		   <!-- Start discus -->	
+			 <div id="disqus_thread">  </div>
+				<script type="text/javascript">
+					/* * * CONFIGURATION VARIABLES * * */
+					var disqus_shortname = 'ylukashov';
+					
+					/* * * DON'T EDIT BELOW THIS LINE * * */
+					(function() {
+						var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+						dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+						(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+					})();
+				</script>
+				<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+							
+	      <!-- End discus -->			 
+	      <!-- Show comment discus -->		 
+			 
+			 <script type="text/javascript">
+				/* * * CONFIGURATION VARIABLES * * */
+				var disqus_shortname = 'ylukashov';
+				
+				/* * * DON'T EDIT BELOW THIS LINE * * */
+				(function () {
+					var s = document.createElement('script'); s.async = true;
+					s.type = 'text/javascript';
+					s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+					(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+				}());
+			</script>
+			 
+			 
+		  <!-- End comment discus -->	 
+			 
+			 
 		</div>
 		 <!-- End Blog Post -->
 		 <!-- Sidebar -->
@@ -287,7 +313,7 @@
 					</div>
 					<!-- End Sidebar -->
 				</div>
-			</div>
+			</div>			
 	    </div>
 
 
@@ -301,7 +327,7 @@
 				<div class="row">
 					<!-- Blog Post Excerpt -->
 					
-					<% FOREACH r = rows_arch.keys.sort.reverse %>
+					<% FOREACH r IN rows_arch %>
 					
 						<div class="col-sm-6">
 							<div class="blog-post blog-single-post">
@@ -310,18 +336,18 @@
 								</div>
 
 								<div class="single-post-image">
-									<img src="<% rows_arch.$r.img_link %>" alt="Post Title">
+									<img src="<% r.img_link %>" alt="Post Title">
 								</div>
 								
 								<div class="single-post-info">
-									<i class="glyphicon glyphicon-time"></i> <% rows_arch.$r.date %> 
+									<i class="glyphicon glyphicon-time"></i> <% r.date %> 
 								</div>
 								
 								<div class="single-post-content">
 								   <p>
-                                      <% rows_arch.$r.small_post %>
+                                      <% r.small_post %>
 								   </p>
-								<a href="/blog/<% rows_arch.$r.date %>" class="btn">Read more</a>
+								<a href="/blog/<% r.date %>" class="btn">Read more</a>
 								</div>
 							</div>
 						</div>
@@ -330,16 +356,6 @@
 					
 					<!-- End Blog Post Excerpt -->
 					
-							<!-- Pagination -->
-							 <% IF pg_count > 4 %>
-								<div class="pagination-wrapper ">
-									<ul class="pagination pagination-sm">
-										<li class="disabled"><a href="#">Previous</a></li>
-										<li class="active"><a href="/blog">1</a></li>
-										<li class="disabled" ><a href="#">Next</a></li>
-									</ul>
-								</div>				
-                             <% END %>
 				</div>
 			</div>
 	    </div>

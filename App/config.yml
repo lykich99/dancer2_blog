@@ -37,6 +37,22 @@ engines:
       start_tag: '<%'
       end_tag:   '%>'
   
+  logger:
+    Console::Colored:
+      colored_origin: "cyan"
+      colored_levels:
+        core: "bold bright_white"
+        debug: "bold bright_blue"
+        info: "bold green"
+        warning: "bold yellow"
+        error: "bold yellow on_red"
+      colored_messages:
+        core: "bold bright_white"
+        debug: "bold bright_blue"
+        info: "bold green"
+        warning: "bold yellow"
+        error: "bold yellow on_red"  
+  
   
   
 plugins:
@@ -54,7 +70,8 @@ plugins:
       on_connect_do: ["SET NAMES 'utf8'", "SET CHARACTER SET 'utf8'" ]
       log_queries: 1
       #handle_class: 'My::Super::Sexy::Database::Handle'
-
+   Ajax:
+      content_type: 'application/json'
 
      
 
