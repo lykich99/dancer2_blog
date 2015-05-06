@@ -132,7 +132,7 @@ get '/blog/page/:name' => sub {
 			$step_p = 4;	
 		} 		
         $sql = "SELECT * FROM blog ORDER BY date DESC limit $step_p,4";
-        $logger->debug($sql); 
+        #$logger->debug($sql); 
      } else {
 		$step_p = 1;
 	    $sql = "SELECT * FROM blog WHERE id >= '$step_p' ORDER BY date DESC limit 4";	
@@ -158,12 +158,14 @@ get '/blog/page/:name' => sub {
 get '/blog/:name' => sub {
 	 my $post_date = params->{name};
 	 my $post = database->prepare( "SELECT * FROM blog WHERE date = '$post_date'" );
-	    $post->execute() or die $DBI::errstr;      
+	    $post->execute() or die $DBI::errstr;   
+	    #rediret for start page blog if database have not data
+	    unless( $post-> rows ) {  redirect './blog'; };
      my $cat = database->prepare( "SELECT * FROM categories" );
         $cat->execute() or die $DBI::errstr;
      my $post4 = database->prepare( "SELECT h1,date FROM blog ORDER by date DESC limit 4" );  
         $post4->execute() or die $DBI::errstr;
-     my $p_ar = database->prepare( "SELECT DISTINCT DATE_FORMAT(date,'%M %Y') as ym FROM blog order by date limit 12" );
+     my $p_ar = database->prepare( "SELECT DISTINCT DATE_FORMAT(date,'%M %Y') as ym FROM blog order by date DESC limit 12" );
         $p_ar->execute() or die $DBI::errstr;
      my $stm = database->prepare( "SELECT h1 FROM blog WHERE date = '$post_date'" );
         $stm->execute() or die $DBI::errstr; 
@@ -176,7 +178,7 @@ get '/blog/:name' => sub {
 	  'rows'       => $post->fetchrow_hashref,
 	  'rows_c'     => $cat->fetchall_hashref('id'), 
 	  'rows_post4' => $post4->fetchall_arrayref({}),
-	  'rows_ar'    => $p_ar->fetchall_hashref('ym'),
+	  'rows_ar'    => $p_ar->fetchall_arrayref({}),
 	  'href_b'     => $href_b,
 	  'title'      => $title
      }		    
