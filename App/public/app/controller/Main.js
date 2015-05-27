@@ -1,6 +1,6 @@
 Ext.define('AM.controller.Main', {
     extend: 'Ext.app.Controller',
-    views: [ 'MenuTree','BlogPanel','BlogGrid','GridForm','UploadForm' ],
+    views: [ 'MenuTree','BlogPanel','BlogGrid','GridForm','UploadForm','DayPhoto' ],
     stores: [ 'MenuStore','BlogStore' ],
     models: [ 'MenuModel','BlogModel' ],
     init: function() {
@@ -24,12 +24,49 @@ Ext.define('AM.controller.Main', {
 		    },
 		   'gridform button[action=save]': {
             	click: this.saveDataForm
+            },
+            'menuTree': {
+			    itemclick: this.clickTree			    
+            },
+            'dayPhoto button[action=save]': {
+				click: this.saveDayPhoto
             }
-            
          });
         
          },
-      
+    
+    saveDayPhoto: function(a,b,c){
+         var f = a.up('form'),form = f.getForm();
+          if(form.isValid()){
+			     form.submit({
+                 url: 'upload_day_photo',
+                 waitMsg: 'Uploading your photo...',
+                   success: function(fp, o) {
+                                        Ext.Msg.show({
+										title: 'Success upload',
+										msg: 'Upload foto: ' + o.result.file,
+										minWidth: 300,
+										modal: true,
+										icon: Ext.Msg.INFO,
+										buttons: Ext.Msg.OK
+									});
+                           },
+                   failure: function(f, a){   
+					                    Ext.Msg.show({
+										title: 'Error upload img',
+										msg: 'Error upload img: ',
+										minWidth: 300,
+										modal: true,
+										icon: Ext.Msg.ERROR,
+										buttons: Ext.Msg.OK
+									});
+
+					     }        
+                           
+                });
+           }
+     },
+    
     saveDataForm: function(b,e){
        var formAdd = b.up('window').down('form').getForm();
        var win    = b.up('window'),
@@ -101,7 +138,14 @@ Ext.define('AM.controller.Main', {
        
     },
       
-             
+    clickTree: function( view, record ) { 
+         var tabpanel = Ext.ComponentQuery.query('tabpanel')[0];
+         var panel = record.data.id;
+         //tabpanel.setActiveTab();
+         Ext.ComponentQuery.query('tabpanel')[0].setActiveTab(Ext.ComponentQuery.query('panel[name='+panel+']')[0]);
+    }, 
+
+        
     onPanelRendered: function() {
         console.log('The panel was rendered');
     }

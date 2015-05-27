@@ -27,7 +27,21 @@ post '/upload' => needs login => sub {
     my $blog_img_dir = config->{public_dir}."/img/blog/";
     my $result =  $upload->copy_to( $blog_img_dir.$upload->filename ); 
     return to_json { "success" => true, "result" => $result, "file" => $upload->filename };
-};
+}; 
+
+post '/upload_day_photo' => needs login => sub {
+	my $title = params->{'title'};
+	my $alt   = params->{'alt'};
+    my $all_uploads   = request->uploads;
+       $logger->debug($all_uploads);
+    my $upload        = $all_uploads->{'day-photo'};
+    my $photo_img_dir = config->{public_dir}."/img/blog/day_photo/";
+    my $result        = $upload->copy_to( $photo_img_dir.$upload->filename );
+    my $img_link      = "/img/blog/day_photo/".$upload->filename;
+       database->do("INSERT INTO day_photo VALUES( '','$img_link','$title','$alt',DATE(NOW()))");
+    return to_json { "success" => true, "result" => $result, "file" => $upload->filename };
+}; 
+
 
 ajax ['get', 'post' ] => '/crud/*' => needs login => sub { 
     my %params  = params(); 
@@ -85,14 +99,20 @@ ajax ['get', 'post' ] => '/crud/*' => needs login => sub {
 get '/' => sub {
 	my $last_post = database->prepare( 'SELECT * FROM blog order by date DESC limit 3' );
 	   $last_post->execute() or die $DBI::errstr;
+	my $day_foto  = database->prepare( 'SELECT * FROM day_photo WHERE id=( SELECT max(id) FROM day_photo )' );
+	   $day_foto->execute() or die $DBI::errstr;  
+    my ( $id, $link, $title_day_foto, $alt ) = $day_foto->fetchrow_array;  
 #	my $session = session;  
 #	   $session->write('test_var', 'ky-ky');
 #	print Dumper($session);
     template 'index', {
-		'css_active' => 'about',
-		'breadcrumb' => 'About Me',
-		'rows'       => $last_post->fetchall_hashref('date'),
-		'title'      => $title
+		'css_active'     => 'about',
+		'breadcrumb'     => 'About Me',
+		'rows'           => $last_post->fetchall_hashref('date'),
+		'title'          => $title,
+		'title_day_foto' => $title_day_foto,
+		'alt'            => $alt,
+		'link'           => $link
 	}
 };
 

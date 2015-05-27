@@ -58,11 +58,6 @@
 						   Code this the site you can get <a href="https://github.com/lykich99/dancer2_blog">github</a>.<br>
 						   My interest programmin, snowbording, motorbike and bees.
 						</p>
-
-
-						
-						
-					
 					</div>
 				</div>
 			</div>
@@ -98,8 +93,8 @@
 	        		<!-- Latest News -->
 	        		<div class="col-sm-6 latest-news">
 	        			
-	        			<h2>Latest News</h2>
-	        			
+	        			<h2>Day photo </h2><b style="color: rgb(174, 198, 44);"> <% alt %> </b>
+	        			<img src="<% link %>"  width="1000" height="400" title="<% title_day_foto %>" alt="<% alt %>">
 		
 	        		</div>
 	        		<!-- End Featured News -->
@@ -306,7 +301,7 @@
 						</ul>
 						<h4>Archive</h4>
 						<ul>
-                           <% FOREACH va IN rows_ar.values %> 
+                           <% FOREACH va IN rows_ar %> 
 							<li><a href="/blog/archive/<% va.ym %>"> <% va.ym %> </a></li>
                            <% END %>
 						</ul>

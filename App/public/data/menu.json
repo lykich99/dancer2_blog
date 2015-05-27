@@ -1,1 +1,1 @@
-[{'text': 'Blog', 'id': 'blog', 'leaf': true, cls: "folder"}]
+[{'text': 'Blog', 'id': 'blogGrid', 'leaf': true, cls: "folder"},{'text': 'Day photo', 'id': 'dayPhoto', 'leaf': true, cls: "folder"}]

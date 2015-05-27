@@ -47,7 +47,10 @@ Ext.application({
                      },
                      items: [
 						   {
-							 xtype: 'blogPanel'
+							 xtype: 'blogGrid'
+						   },
+						   {
+							 xtype: 'dayPhoto'
 						   }
                      ] 
                   }

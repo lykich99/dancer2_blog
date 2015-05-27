@@ -3,6 +3,7 @@ Ext.define('AM.view.BlogGrid', {
     alias: 'widget.blogGrid',
     autoScroll: true,
     store: 'BlogStore',
+    name:'blogGrid',
     //    forceFit: true,
     title : 'Blog post',
     iconCls: 'icon-grid',
