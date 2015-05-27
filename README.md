@@ -36,14 +36,14 @@ This is not finished relise. Every day more code. <a href="http://ylukashov.tk">
                PRIMARY KEY (`id`),
                KEY `date` (`date`),
                KEY `categories_id` (`categories_id`)
-              ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Content for blog' 
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Content for blog'; 
               
         CREATE TABLE `categories` (
 		  `id` int(10) NOT NULL AUTO_INCREMENT,
 	           `categories_name` char(20) NOT NULL,
   		   PRIMARY KEY (`id`),
   		   UNIQUE KEY `categories_name` (`categories_name`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
+            ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
         
         CREATE TABLE `users` (
                   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -51,8 +51,20 @@ This is not finished relise. Every day more code. <a href="http://ylukashov.tk">
                   `password` varchar(100) DEFAULT NULL,
                    PRIMARY KEY (`id`),
                    UNIQUE KEY `username` (`username`)
-               ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8      
+               ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;      
 
+      CREATE TABLE `day_photo` (
+               `id` int(11) NOT NULL AUTO_INCREMENT,
+               `link` char(150) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+               `title` char(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+               `alt` char(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+               `date_add` date NOT NULL COMMENT 'Date add photo',
+                PRIMARY KEY (`id`),
+                KEY `link` (`link`)
+              ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='Day photo';
+  
+  
+  
   
       For test you can use the data dump blog.sql<br>
        mysql -u user -p blog < blog.sql<br>
